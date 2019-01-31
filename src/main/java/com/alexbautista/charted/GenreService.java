@@ -3,17 +3,23 @@ package com.alexbautista.charted;
 import com.alexbautista.charted.model.Genre;
 
 public class GenreService {
-    public void printGenre(Genre genre){
-        if(genre.equals(Genre.JAZZ)){
-            System.out.println("You chose JAZZ");
-        }else if(genre.equals(Genre.BLUES)){
-            System.out.println("You chose BLUES");
-        }else if(genre.equals(Genre.ROCK)){
-            System.out.println("You chose ROCK");
-        }else if(genre.equals(Genre.HIPHOP)){
-            System.out.println("You chose HIPHOP");
-        }else{
-            System.out.println("nothing chosen");
+    public void printGenre(Genre genre) {
+        switch (genre) {
+            case JAZZ:
+                System.out.println("You chose JAZZ");
+                break;
+            case BLUES:
+                System.out.println("You chose BLUES");
+                break;
+            case ROCK:
+                System.out.println("You chose ROCK");
+                break;
+            case HIPHOP:
+                System.out.println("You chose HIPHOP");
+                break;
+            default:
+                System.out.println("nothing chosen");
+                break;
         }
     }
 }

@@ -23,7 +23,7 @@ public class AddSongServlet extends HttpServlet {
         var title = req.getParameter("songTitle");
         var artist = req.getParameter("songArtist");
         var genre = req.getParameter("songGenre");
-        var mastery_level = req.getParameter("knowledgeLevel");
+        var masteryLevel = req.getParameter("knowledgeLevel");
         var uploader = 1; // need to grab from session
 
         //file input
@@ -46,41 +46,36 @@ public class AddSongServlet extends HttpServlet {
             String myDriver = "com.mysql.jdbc.Driver";
             String myUrl = "jdbc:mysql://localhost/charted_schema";
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE");
+            try (Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
 
-            var query = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, title);
-            ps.setString(2, artist);
-            ps.setString(3, genre);
-            ps.setInt(5, uploader);
+                var query = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, title);
+                    ps.setString(2, artist);
+                    ps.setString(3, genre);
+                    ps.setInt(5, uploader);
 
-            if (inputStream != null) {
-                System.out.println("input stream is not null");
-                ps.setBlob(4, inputStream);
-            } else {System.out.println("Input stream IS null");}
+                    if (inputStream != null) {
+                        System.out.println("input stream is not null");
+                        ps.setBlob(4, inputStream);
+                    } else {
+                        System.out.println("Input stream IS null");
+                    }
 
-            var row = ps.executeUpdate();
-            if (row > 0){
-                System.out.println();
+                    var row = ps.executeUpdate();
+                    if (row > 0) {
+                        System.out.println();
+                    }
+
+                    if (row == 1) {
+                        System.out.println("Song Added");
+                    } else {
+                        System.out.println("Error Adding Song");
+                    }
+                }
             }
-
-            System.out.println(query);
-
-            if (row == 1){
-                System.out.println("Song Added");
-            } else {
-                System.out.println("Error Adding Song");
-            }
-
-            ps.close();
-            conn.close();
-
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 }

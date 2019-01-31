@@ -21,31 +21,25 @@ public class LoginServlet extends HttpServlet {
 
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        boolean status = false;
+        boolean status;
 
         String user = req.getParameter("username");
         String pass = req.getParameter("userpass");
-
 
         try {
             String myDriver = "com.mysql.jdbc.Driver";
             String myUrl = "jdbc:mysql://localhost/charted_schema";
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE");
-
-            PreparedStatement ps = conn.prepareStatement("select * from user where email=? and pass=?");
-            ps.setString(1, user);
-            ps.setString(2, pass);
-
-            ResultSet rs = ps.executeQuery();
-            status = rs.next();
-
-            rs.close();
-            ps.close();
-            conn.close();
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        } catch (SQLException ex) {
+            try (Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
+                try (PreparedStatement ps = conn.prepareStatement("select * from user where email=? and pass=?")) {
+                    ps.setString(1, user);
+                    ps.setString(2, pass);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        status = rs.next();
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
             throw new RuntimeException(ex);
         }
 

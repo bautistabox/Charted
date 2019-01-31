@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
 
-@WebServlet (
+@WebServlet(
         name = "findsongservlet",
         urlPatterns = "/find_song"
 )
@@ -27,29 +27,25 @@ public class FindSongServlet extends HttpServlet {
             String myDriver = "com.mysql.jdbc.Driver";
             String myUrl = "jdbc:mysql://localhost/charted_schema";
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE");
-
-            // SQL SELECT query
-            var query = "SELECT title, artist, genre FROM song WHERE title=\"" + song + "\"";
-
-            // Java Statement
-            Statement st = conn.createStatement();
-
-            // execute the query and get java resultset
-            ResultSet rs = st.executeQuery(query);
-            while(rs.next()) {
-                title = rs.getString("title");
-                artist = rs.getString("artist");
-                genre = rs.getString("genre");
-                file = "im a file";
-                uploader_id = rs.getInt("uploader_id");
+            try(Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
+                // SQL SELECT query
+                var query = "SELECT title, artist, genre FROM song WHERE title=?";
+                // Java Statement
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, song);
+                    // execute the query and get java resultset
+                    try (ResultSet rs = ps.executeQuery(query)) {
+                        while (rs.next()) {
+                            title = rs.getString("title");
+                            artist = rs.getString("artist");
+                            genre = rs.getString("genre");
+                            file = "im a file";
+                            uploader_id = rs.getInt("uploader_id");
+                        }
+                    }
+                }
             }
-            rs.close();
-            st.close();
-            conn.close();
-        } catch(ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
-        } catch(SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             throw new RuntimeException(ex);
         }
 
