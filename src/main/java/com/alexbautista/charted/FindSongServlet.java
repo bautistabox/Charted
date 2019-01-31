@@ -19,6 +19,8 @@ public class FindSongServlet extends HttpServlet {
         String title = "";
         String artist = "";
         String genre = "";
+        String file = "";
+        int uploader_id = 0;
 
         try {
             // creating mysql DB connection
@@ -39,6 +41,8 @@ public class FindSongServlet extends HttpServlet {
                 title = rs.getString("title");
                 artist = rs.getString("artist");
                 genre = rs.getString("genre");
+                file = "im a file";
+                uploader_id = rs.getInt("uploader_id");
             }
             rs.close();
             st.close();

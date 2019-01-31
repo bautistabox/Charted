@@ -15,7 +15,7 @@
         <br>
         <h1>Add a Song</h1>
         <br><br>
-        <form method="post" action="/add_song">
+        <form method="post" action="/add_song" enctype="multipart/form-data">
             <input type="text" name="songTitle" placeholder="Title">
             <br><br>
             <input type="text" name="songArtist" placeholder="Artist">

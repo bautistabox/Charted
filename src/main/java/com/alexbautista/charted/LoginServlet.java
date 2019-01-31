@@ -15,7 +15,7 @@ import java.sql.*;
         urlPatterns = "/loginServlet"
 )
 
-public class login_servlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
 

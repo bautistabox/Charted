@@ -16,7 +16,7 @@ import java.sql.*;
         urlPatterns = "/create_account"
 )
 
-public class create_account extends HttpServlet {
+public class CreateAccount extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
         var username = req.getParameter("user");

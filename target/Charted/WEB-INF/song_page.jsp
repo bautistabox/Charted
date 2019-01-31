@@ -9,14 +9,29 @@
 <html>
 <head>
     <title>${title}</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 
-<center><h1>${title}</h1>
-
-<p>Song: ${title}</p>
-<p>Artist: ${artist}</p>
-<p>Genre: ${genre}</p>
-</center>
+<table style="width:100%">
+    <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Genre</th>
+        <th>PDF</th>
+        <th>Uploaded By</th>
+    </tr>
+    <tr>
+        <td>${title}</td>
+        <td>${artist}</td>
+        <td>${genre}</td>
+        <td>${file}</td>
+        <td>${uploader_id}</td>
+    </tr>
+</table>
 </body>
 </html>
