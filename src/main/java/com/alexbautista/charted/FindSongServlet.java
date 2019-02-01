@@ -24,13 +24,14 @@ public class FindSongServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var songQuery = req.getParameter("searched_song");
         Song song = new Song();
+        int level = 0;
 
         try {
             try(Connection conn = connectionFactory.getConnection()) {
                 // SQL SELECT query
-                var query = "SELECT id, title, artist, genre, uploader_id FROM song WHERE title=?";
+                var query1 = "SELECT id, title, artist, genre, uploader_id FROM song WHERE title=?";
                 // Java Statement
-                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                try (PreparedStatement ps = conn.prepareStatement(query1)) {
                     ps.setString(1, songQuery);
                     // execute the query and get java resultset
                     try (ResultSet rs = ps.executeQuery()) {
@@ -43,6 +44,18 @@ public class FindSongServlet extends HttpServlet {
                         }
                     }
                 }
+                var query2 = "SELECT mastery_level FROM song_mastery WHERE song_id=? AND user_id=?";
+                try (PreparedStatement ps = conn.prepareStatement(query2)) {
+                    ps.setInt(1, song.getId());
+                    ps.setInt(2, song.getUploader()); // need to change this to session user
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            level = rs.getInt("mastery_level");
+                        }
+                    }
+                }
+
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -53,6 +66,7 @@ public class FindSongServlet extends HttpServlet {
         req.setAttribute("artist", song.getArtist());
         req.setAttribute("genre", song.getGenre());
         req.setAttribute("uploader", song.getUploader());
+        req.setAttribute("level", level);
         req.getRequestDispatcher("/WEB-INF/song_page.jsp").forward(req, resp);
     }
 }

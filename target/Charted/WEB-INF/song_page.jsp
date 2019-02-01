@@ -22,6 +22,7 @@
         <th>Title</th>
         <th>Artist</th>
         <th>Genre</th>
+        <th>How Well You Know It</th>
         <th>PDF</th>
         <th>Uploaded By</th>
     </tr>
@@ -29,6 +30,7 @@
         <td>${title}</td>
         <td>${artist}</td>
         <td>${genre}</td>
+        <th>${level}</th>
         <td><a href="download_song?song_id=${id}">Download PDF</a></td>
         <td>${uploader}</td>
     </tr>
