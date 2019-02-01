@@ -11,9 +11,9 @@
 
     <form method="get" action="/find_song">
         <br>
+        <h4>Find a song</h4>
         <input type="text" name="searched_song">
-        <br><br>
-        <input type="submit" value="Find a Song">
+        <input type="submit" value="Go">
         <br><br>
     </form>
 

@@ -1,17 +1,19 @@
 package com.alexbautista.charted;
 
+import com.alexbautista.charted.model.ConnectionFactory;
+import com.alexbautista.charted.model.ConnectionFactoryImpl;
+import com.alexbautista.charted.model.Genre;
+import com.alexbautista.charted.model.Song;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
-@WebServlet (
+@WebServlet(
         name = "addsongservlet",
         urlPatterns = "/add_song"
 )
@@ -19,15 +21,30 @@ import java.sql.*;
 @MultipartConfig(maxFileSize = 16177215)
 
 public class AddSongServlet extends HttpServlet {
+    private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var title = req.getParameter("songTitle");
-        var artist = req.getParameter("songArtist");
-        var genre = req.getParameter("songGenre");
+
         var masteryLevel = req.getParameter("knowledgeLevel");
-        var uploader = 1; // need to grab from session
+
+        Cookie ck[] = req.getCookies();
+        int uId = 0;
+        System.out.println(ck[0].getValue());
+
+        for (var c : ck) {
+            if (c.getName().equals("userId")){
+                uId = Integer.valueOf(c.getValue());
+            }
+        }
+
+        Song song = new Song(
+                req.getParameter("songTitle"),
+                req.getParameter("songArtist"),
+                Genre.valueOf(req.getParameter("songGenre")),
+                uId
+                );
 
         //file input
-
         InputStream inputStream = null; // input stream of the upload file
 
         // obtain the upload file part in this multipart request
@@ -43,17 +60,14 @@ public class AddSongServlet extends HttpServlet {
         }
 
         try {
-            String myDriver = "com.mysql.jdbc.Driver";
-            String myUrl = "jdbc:mysql://localhost/charted_schema";
-            Class.forName(myDriver);
-            try (Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
+            try (Connection conn = connectionFactory.getConnection()) {
 
                 var query = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(query)) {
-                    ps.setString(1, title);
-                    ps.setString(2, artist);
-                    ps.setString(3, genre);
-                    ps.setInt(5, uploader);
+                    ps.setString(1, song.getTitle());
+                    ps.setString(2, song.getArtist());
+                    ps.setString(3, song.getGenre().name());
+                    ps.setInt(5, song.getUploader());
 
                     if (inputStream != null) {
                         System.out.println("input stream is not null");
@@ -67,14 +81,14 @@ public class AddSongServlet extends HttpServlet {
                         System.out.println();
                     }
 
-                    if (row == 1) {
+                    if (row >= 1) {
                         System.out.println("Song Added");
                     } else {
                         System.out.println("Error Adding Song");
                     }
                 }
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }

@@ -1,5 +1,10 @@
 package com.alexbautista.charted;
 
+import com.alexbautista.charted.model.ConnectionFactory;
+import com.alexbautista.charted.model.ConnectionFactoryImpl;
+import com.alexbautista.charted.model.Genre;
+import com.alexbautista.charted.model.Song;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,45 +19,40 @@ import java.sql.*;
 )
 
 public class FindSongServlet extends HttpServlet {
+    private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var song = (req.getParameter("searched_song"));
-        String title = "";
-        String artist = "";
-        String genre = "";
-        String file = "";
-        int uploader_id = 0;
+        var songQuery = req.getParameter("searched_song");
+        Song song = new Song();
 
         try {
-            // creating mysql DB connection
-            String myDriver = "com.mysql.jdbc.Driver";
-            String myUrl = "jdbc:mysql://localhost/charted_schema";
-            Class.forName(myDriver);
-            try(Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
+            try(Connection conn = connectionFactory.getConnection()) {
                 // SQL SELECT query
-                var query = "SELECT title, artist, genre FROM song WHERE title=?";
+                var query = "SELECT id, title, artist, genre, uploader_id FROM song WHERE title=?";
                 // Java Statement
                 try (PreparedStatement ps = conn.prepareStatement(query)) {
-                    ps.setString(1, song);
+                    ps.setString(1, songQuery);
                     // execute the query and get java resultset
-                    try (ResultSet rs = ps.executeQuery(query)) {
+                    try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
-                            title = rs.getString("title");
-                            artist = rs.getString("artist");
-                            genre = rs.getString("genre");
-                            file = "im a file";
-                            uploader_id = rs.getInt("uploader_id");
+                            song.setId(rs.getInt("id"));
+                            song.setTitle(rs.getString("title"));
+                            song.setArtist(rs.getString("artist"));
+                            song.setGenre(Genre.valueOf(rs.getString("genre")));
+                            song.setUploader(rs.getInt("uploader_id"));
                         }
                     }
                 }
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
 
-        req.setAttribute("title", title);
-        req.setAttribute("artist", artist);
-        req.setAttribute("genre", genre);
-
+        req.setAttribute("id", song.getId());
+        req.setAttribute("title", song.getTitle());
+        req.setAttribute("artist", song.getArtist());
+        req.setAttribute("genre", song.getGenre());
+        req.setAttribute("uploader", song.getUploader());
         req.getRequestDispatcher("/WEB-INF/song_page.jsp").forward(req, resp);
     }
 }

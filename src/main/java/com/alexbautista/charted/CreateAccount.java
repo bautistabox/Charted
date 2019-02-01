@@ -1,5 +1,8 @@
 package com.alexbautista.charted;
 
+import com.alexbautista.charted.model.ConnectionFactory;
+import com.alexbautista.charted.model.ConnectionFactoryImpl;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +17,8 @@ import java.sql.*;
 )
 
 public class CreateAccount extends HttpServlet {
+    private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         var username = req.getParameter("user");
@@ -22,12 +27,7 @@ public class CreateAccount extends HttpServlet {
 
         if (pass1.equals(pass2)) {
             try {
-                // creating mysql DB connection
-                String myDriver = "com.mysql.jdbc.Driver";
-                String myUrl = "jdbc:mysql://localhost/charted_schema";
-                Class.forName(myDriver);
-                try (Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
-
+                try (Connection conn = connectionFactory.getConnection()) {
                     // SQL INSERT query
                     var query = "INSERT into user (email, pass) VALUES (?, ?)";
 
@@ -44,7 +44,7 @@ public class CreateAccount extends HttpServlet {
                         }
                     }
                 }
-            } catch (ClassNotFoundException | SQLException ex) {
+            } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
         } else {

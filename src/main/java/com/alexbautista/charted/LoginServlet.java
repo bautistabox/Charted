@@ -1,8 +1,12 @@
 package com.alexbautista.charted;
 
+import com.alexbautista.charted.model.ConnectionFactory;
+import com.alexbautista.charted.model.ConnectionFactoryImpl;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +20,8 @@ import java.sql.*;
 )
 
 public class LoginServlet extends HttpServlet {
+    private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
 
@@ -25,25 +31,26 @@ public class LoginServlet extends HttpServlet {
 
         String user = req.getParameter("username");
         String pass = req.getParameter("userpass");
-
+        int userId;
         try {
-            String myDriver = "com.mysql.jdbc.Driver";
-            String myUrl = "jdbc:mysql://localhost/charted_schema";
-            Class.forName(myDriver);
-            try (Connection conn = DriverManager.getConnection(myUrl, "root", "123!@#qweQWE")) {
+            try (Connection conn = connectionFactory.getConnection()) {
                 try (PreparedStatement ps = conn.prepareStatement("select * from user where email=? and pass=?")) {
                     ps.setString(1, user);
                     ps.setString(2, pass);
                     try (ResultSet rs = ps.executeQuery()) {
                         status = rs.next();
+                        userId = rs.getInt("id");
                     }
                 }
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
 
         if(status) {
+            Cookie ck = new Cookie("userId", Integer.toString(userId));
+            resp.addCookie(ck);
+            System.out.println(ck.getValue());
             RequestDispatcher rd = req.getRequestDispatcher("home.jsp");
             rd.forward(req, resp);
         } else {

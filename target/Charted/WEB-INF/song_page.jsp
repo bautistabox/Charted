@@ -29,8 +29,8 @@
         <td>${title}</td>
         <td>${artist}</td>
         <td>${genre}</td>
-        <td>${file}</td>
-        <td>${uploader_id}</td>
+        <td><a href="download_song?song_id=${id}">Download PDF</a></td>
+        <td>${uploader}</td>
     </tr>
 </table>
 </body>
