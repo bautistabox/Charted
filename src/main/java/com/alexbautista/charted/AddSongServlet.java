@@ -25,14 +25,14 @@ public class AddSongServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        var masteryLevel = req.getParameter("knowledgeLevel");
+        var masteryLevel = Integer.valueOf(req.getParameter("knowledgeLevel"));
 
         Cookie ck[] = req.getCookies();
         int uId = 0;
         System.out.println(ck[0].getValue());
 
         for (var c : ck) {
-            if (c.getName().equals("userId")){
+            if (c.getName().equals("userId")) {
                 uId = Integer.valueOf(c.getValue());
             }
         }
@@ -42,7 +42,7 @@ public class AddSongServlet extends HttpServlet {
                 req.getParameter("songArtist"),
                 Genre.valueOf(req.getParameter("songGenre")),
                 uId
-                );
+        );
 
         //file input
         InputStream inputStream = null; // input stream of the upload file
@@ -60,10 +60,10 @@ public class AddSongServlet extends HttpServlet {
         }
 
         try {
+            int song_id = 0;
             try (Connection conn = connectionFactory.getConnection()) {
-
-                var query = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
-                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                var query1 = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(query1)) {
                     ps.setString(1, song.getTitle());
                     ps.setString(2, song.getArtist());
                     ps.setString(3, song.getGenre().name());
@@ -77,14 +77,36 @@ public class AddSongServlet extends HttpServlet {
                     }
 
                     var row = ps.executeUpdate();
-                    if (row > 0) {
-                        System.out.println();
-                    }
 
                     if (row >= 1) {
                         System.out.println("Song Added");
                     } else {
                         System.out.println("Error Adding Song");
+                    }
+
+                }
+                var query2 = "select id from song where title=?";
+                try (PreparedStatement ps = conn.prepareStatement(query2)) {
+                    ps.setString(1, song.getTitle());
+
+                    try (var rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            song_id = rs.getInt("id");
+                        }
+                    }
+                }
+                var query3 = "INSERT INTO song_mastery (song_id, user_id, mastery_level) VALUES (?,?,?)";
+                try (PreparedStatement ps = conn.prepareStatement(query3)) {
+                    ps.setInt(1, song_id);
+                    ps.setInt(2, song.getUploader());
+                    ps.setInt(3, masteryLevel);
+
+                    var row = ps.executeUpdate();
+
+                    if (row >= 1) {
+                        System.out.println("Level Added");
+                    } else {
+                        System.out.println("Error Adding Level");
                     }
                 }
             }
