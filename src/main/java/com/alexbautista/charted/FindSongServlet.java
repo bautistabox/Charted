@@ -7,6 +7,7 @@ import com.alexbautista.charted.model.Song;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +25,8 @@ public class FindSongServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var songQuery = req.getParameter("searched_song");
         Song song = new Song();
-        int level = 0;
+        var level = "";
+        var uploader = "";
 
         try {
             try(Connection conn = connectionFactory.getConnection()) {
@@ -48,13 +50,49 @@ public class FindSongServlet extends HttpServlet {
                 try (PreparedStatement ps = conn.prepareStatement(query2)) {
                     ps.setInt(1, song.getId());
                     ps.setInt(2, song.getUploader()); // need to change this to session user
+                    var levelInt = 0;
 
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
-                            level = rs.getInt("mastery_level");
+                            levelInt = rs.getInt("mastery_level");
+                        }
+                    }
+
+                    switch (levelInt) {
+                        case 1:
+                            level = "You've listened to it";
+                            break;
+                        case 2:
+                            level = "You're an amateur";
+                            break;
+                        case 3:
+                            level = "You're average";
+                            break;
+                        case 4:
+                            level = "You're a semi-pro";
+                            break;
+                        case 5:
+                            level ="You're a pro";
+                            break;
+                        default:
+                            level = "Have you even listened?";
+                            break;
+                    }
+
+                }
+                // get the uploader's username
+                var query3 = "SELECT email FROM user WHERE id=?";
+                try (PreparedStatement ps = conn.prepareStatement(query3)) {
+                    ps.setInt(1, song.getUploader());
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            uploader = rs.getString("email");
                         }
                     }
                 }
+
+
 
             }
         } catch (SQLException ex) {
@@ -65,7 +103,7 @@ public class FindSongServlet extends HttpServlet {
         req.setAttribute("title", song.getTitle());
         req.setAttribute("artist", song.getArtist());
         req.setAttribute("genre", song.getGenre());
-        req.setAttribute("uploader", song.getUploader());
+        req.setAttribute("uploader", uploader);
         req.setAttribute("level", level);
         req.getRequestDispatcher("/WEB-INF/song_page.jsp").forward(req, resp);
     }

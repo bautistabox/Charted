@@ -6,10 +6,7 @@ import com.alexbautista.charted.model.ConnectionFactoryImpl;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -48,15 +45,19 @@ public class LoginServlet extends HttpServlet {
         }
 
         if(status) {
-            Cookie ck = new Cookie("userId", Integer.toString(userId));
-            resp.addCookie(ck);
-            System.out.println(ck.getValue());
-            RequestDispatcher rd = req.getRequestDispatcher("home.jsp");
-            rd.forward(req, resp);
+            HttpSession session = req.getSession();
+            session.setAttribute("user", "admin");
+            session.setMaxInactiveInterval(30*60);
+            Cookie userName = new Cookie("user", user);
+            Cookie uID = new Cookie("uid", String.valueOf(userId));
+            userName.setMaxAge(30*60);
+            resp.addCookie(userName);
+            resp.addCookie(uID);
+            resp.sendRedirect("home.jsp");
         } else {
             out.print("Sorry username or password is incorrect");
-            RequestDispatcher rd = req.getRequestDispatcher("index.js");
-            rd.include(req, resp);
+            //RequestDispatcher rd = req.getRequestDispatcher("index.js");
+            //rd.include(req, resp);
         }
         out.close();
     }

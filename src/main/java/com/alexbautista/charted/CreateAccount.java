@@ -39,6 +39,7 @@ public class CreateAccount extends HttpServlet {
                         var result = ps.executeUpdate();
                         if (result == 1) {
                             System.out.println("Account Created");
+                            resp.sendRedirect("home.jsp");
                         } else {
                             System.out.println("Creating Error");
                         }

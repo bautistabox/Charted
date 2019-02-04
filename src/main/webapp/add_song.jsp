@@ -32,16 +32,16 @@
             <label for="radioOne">I've listened to it...</label>
             <br>
             <input type="radio" id="radioTwo" name="knowledgeLevel" value="2">
-            <label for="radioTwo">I've starting learning</label>
+            <label for="radioTwo">I'm an amateur</label>
             <br>
             <input type="radio" id="radioThree" name="knowledgeLevel" value="3">
-            <label for="radioThree">I'm getting there!</label>
+            <label for="radioThree">I'm average!</label>
             <br>
             <input type="radio" id="radioFour" name="knowledgeLevel" value="4">
-            <label for="radioFour">F*** it.. We'll do it live! ಠ_ಠ</label>
+            <label for="radioFour">I'm a semi-pro</label>
             <br>
             <input type="radio" id="radioFive" name="knowledgeLevel" value="5">
-            <label for="radioFive">Perfection</label>
+            <label for="radioFive">I'm a pro</label>
         </div>
 
         <br><br>

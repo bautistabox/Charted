@@ -32,7 +32,7 @@ public class AddSongServlet extends HttpServlet {
         System.out.println(ck[0].getValue());
 
         for (var c : ck) {
-            if (c.getName().equals("userId")) {
+            if (c.getName().equals("uid")) {
                 uId = Integer.valueOf(c.getValue());
             }
         }
@@ -105,6 +105,7 @@ public class AddSongServlet extends HttpServlet {
 
                     if (row >= 1) {
                         System.out.println("Level Added");
+                        resp.sendRedirect("home.jsp");
                     } else {
                         System.out.println("Error Adding Level");
                     }

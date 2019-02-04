@@ -25,6 +25,8 @@
         <th>How Well You Know It</th>
         <th>PDF</th>
         <th>Uploaded By</th>
+        <th></th>
+        <th></th>
     </tr>
     <tr>
         <td>${title}</td>
@@ -33,6 +35,8 @@
         <th>${level}</th>
         <td><a href="download_song?song_id=${id}">Download PDF</a></td>
         <td>${uploader}</td>
+        <td><a href="/update?song_id=${id}">Update</a></td>
+        <td><a href="/delete?song_id=${id}">Delete</a></td>
     </tr>
 </table>
 </body>

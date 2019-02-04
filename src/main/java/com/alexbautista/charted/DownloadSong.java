@@ -25,9 +25,7 @@ public class DownloadSong extends HttpServlet {
         try {
             try (Connection conn = connectionFactory.getConnection()) {
                 try (PreparedStatement ps = conn.prepareStatement("SELECT file from song where id = ?")) {
-                    int songId = Integer.valueOf(req.getParameter("song_id"));
-
-                    ps.setInt(1, songId);
+                    ps.setInt(1, Integer.valueOf(req.getParameter("song_id")));
 
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
@@ -65,13 +63,12 @@ public class DownloadSong extends HttpServlet {
                         outputStream.close();
                     } else {
                         // no file found
-                        resp.getWriter().print("File not found for the id: " + songId);
+                        resp.getWriter().print("File not found");
                     }
                 }
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 }
