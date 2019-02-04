@@ -27,6 +27,8 @@
         &nbsp;&nbsp;
         <a href="/home">Home</a>
     </divTop>
+    <br><br>
+    <h4>Please Refill Fields</h4>
 </center>
 
 <table style="width:100%">
@@ -59,7 +61,7 @@
             <td><input type="file" name="upload" accept="application/pdf"/></td>
 
             <td>${uploader}</td>
-            <td><input type="submit" value="update"/></td>
+            <td><input type="submit" value="save"/></td>
         </form>
         <td><a href="/delete?song_id=${id}">Delete</a></td>
     </tr>

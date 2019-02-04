@@ -47,14 +47,17 @@
         <th>${level}</th>
         <td><a href="download_song?song_id=${id}">Download PDF</a></td>
         <td>${uploader}</td>
-        <td><a href="/update?song_id=${id}">Update</a></td>
         <td>
-
+            <form method="get" action="/update">
+                <input type="submit" value="Update"/>
+                <input type="hidden" name="secret_id" value="${id}"/>
+            </form>
+        </td>
+        <td>
             <form method="post" action="/delete">
                 <input type="submit" value="Delete"/>
-                <input type="hidden" name="secret_id" value="${id}">
+                <input type="hidden" name="secret_id" value="${id}"/>
             </form>
-
         </td>
     </tr>
 </table>

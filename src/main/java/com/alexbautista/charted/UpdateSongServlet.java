@@ -3,6 +3,7 @@ package com.alexbautista.charted;
 import com.alexbautista.charted.model.ConnectionFactory;
 import com.alexbautista.charted.model.ConnectionFactoryImpl;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,13 @@ import java.sql.SQLException;
 
 public class UpdateSongServlet extends HttpServlet {
     ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+            throws IOException, ServletException {
+        req.getRequestDispatcher("/WEB-INF/update.jsp").forward(req, resp);
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
             try (Connection conn = connectionFactory.getConnection()) {
 
