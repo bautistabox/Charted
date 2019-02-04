@@ -9,13 +9,13 @@
     <br>
     <h1>Welcome to Charted</h1>
     <br><br><br>
-    <form action="loginServlet" method="post">
+    <form action="home" method="post">
         Email: <input type="text" name="username"/><br><br>
         Password: <input type="password" name="userpass"/><br><br>
         <input type="submit" value="login"/>
     </form>
     <br>
-    <a href="signup.jsp">Sign Up</a>
+    <a href="/signup">Sign Up</a>
 </center>
 </body>
 </html>

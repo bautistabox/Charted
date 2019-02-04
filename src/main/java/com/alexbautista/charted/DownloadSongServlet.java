@@ -18,7 +18,7 @@ import java.sql.*;
         urlPatterns = "/download_song"
 )
 
-public class DownloadSong extends HttpServlet {
+public class DownloadSongServlet extends HttpServlet {
     ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

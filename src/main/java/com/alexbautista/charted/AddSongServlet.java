@@ -23,7 +23,13 @@ import java.sql.*;
 public class AddSongServlet extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/add_song.jsp").forward(req, resp);
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         var masteryLevel = Integer.valueOf(req.getParameter("knowledgeLevel"));
 
@@ -105,7 +111,7 @@ public class AddSongServlet extends HttpServlet {
 
                     if (row >= 1) {
                         System.out.println("Level Added");
-                        resp.sendRedirect("home.jsp");
+                        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
                     } else {
                         System.out.println("Error Adding Level");
                     }

@@ -2,8 +2,8 @@ package com.alexbautista.charted;
 
 import com.alexbautista.charted.model.ConnectionFactory;
 import com.alexbautista.charted.model.ConnectionFactoryImpl;
-import com.alexbautista.charted.model.DigestMessage;
-import com.alexbautista.charted.model.DigestMessageImpl;
+import com.alexbautista.charted.model.PasswordHasher;
+import com.alexbautista.charted.model.PasswordHasherImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,12 +15,17 @@ import java.sql.*;
 
 @WebServlet(
         name = "login_servlet",
-        urlPatterns = "/loginServlet"
+        urlPatterns = "/home"
 )
 
 public class LoginServlet extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
-    private final DigestMessage digestMessage = new DigestMessageImpl();
+    private final PasswordHasher passwordHasher = new PasswordHasherImpl();
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+    }
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -30,7 +35,7 @@ public class LoginServlet extends HttpServlet {
         boolean status;
 
         String user = req.getParameter("username");
-        String pass = digestMessage.getDigest(req.getParameter("userpass"));
+        String pass = passwordHasher.hashPassword(req.getParameter("userpass"));
         int userId;
         try {
             try (Connection conn = connectionFactory.getConnection()) {
@@ -56,11 +61,11 @@ public class LoginServlet extends HttpServlet {
             userName.setMaxAge(30 * 60);
             resp.addCookie(userName);
             resp.addCookie(uID);
-            resp.sendRedirect("home.jsp");
+            req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
         } else {
-            out.print("Sorry username or password is incorrect");
-            //RequestDispatcher rd = req.getRequestDispatcher("index.js");
-            //rd.include(req, resp);
+            req.setAttribute("error", "password error");
+            RequestDispatcher rd = req.getRequestDispatcher("index.js");
+            rd.include(req, resp);
         }
         out.close();
     }

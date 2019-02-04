@@ -13,9 +13,21 @@
         table, th, td {
             border: 1px solid black;
         }
+
+        divTop {
+            border-bottom: 1px solid black;
+        }
     </style>
 </head>
 <body>
+<center>
+    <br>
+    <divTop>
+        <a href="/LogoutServlet">Logout</a>
+        &nbsp;&nbsp;
+        <a href="/home">Home</a>
+    </divTop>
+</center>
 
 <table style="width:100%">
     <tr>

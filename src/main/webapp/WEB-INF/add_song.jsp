@@ -9,9 +9,20 @@
 <html>
 <head>
     <title>Add a Song</title>
+    <style>
+        divTop {
+            border-bottom: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 <center>
+    <divTop>
+        <br>
+        <a href="/LogoutServlet">Logout</a>
+        &nbsp;&nbsp;
+        <a href="/home">Home</a>
+    </divTop>
     <br>
     <h1>Add a Song</h1>
     <br><br>

@@ -12,10 +12,22 @@
     <style>
         table, th, td {
             border: 1px solid black;
+            text-align: center;
+        }
+
+        divTop {
+            border-bottom: 1px solid black;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+<br>
+<divTop>
+    <a href="/LogoutServlet">Logout</a>
+    &nbsp;&nbsp;
+    <a href="/home">Home</a>
+</divTop>
 
 <table style="width:100%">
     <tr>
@@ -36,7 +48,14 @@
         <td><a href="download_song?song_id=${id}">Download PDF</a></td>
         <td>${uploader}</td>
         <td><a href="/update?song_id=${id}">Update</a></td>
-        <td><a href="/delete?song_id=${id}">Delete</a></td>
+        <td>
+
+            <form method="post" action="/delete">
+                <input type="submit" value="Delete"/>
+                <input type="hidden" name="secret_id" value="${id}">
+            </form>
+
+        </td>
     </tr>
 </table>
 </body>

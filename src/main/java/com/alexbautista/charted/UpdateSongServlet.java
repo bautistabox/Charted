@@ -13,8 +13,7 @@ import java.sql.SQLException;
 
 @WebServlet(urlPatterns = "/update")
 
-public class UpdateSong extends HttpServlet {
-/*
+public class UpdateSongServlet extends HttpServlet {
     ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -27,5 +26,4 @@ public class UpdateSong extends HttpServlet {
         }
 
     }
-*/
 }

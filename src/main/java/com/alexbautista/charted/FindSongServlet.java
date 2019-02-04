@@ -29,7 +29,7 @@ public class FindSongServlet extends HttpServlet {
         var uploader = "";
 
         try {
-            try(Connection conn = connectionFactory.getConnection()) {
+            try (Connection conn = connectionFactory.getConnection()) {
                 // SQL SELECT query
                 var query1 = "SELECT id, title, artist, genre, uploader_id FROM song WHERE title=?";
                 // Java Statement
@@ -37,12 +37,17 @@ public class FindSongServlet extends HttpServlet {
                     ps.setString(1, songQuery);
                     // execute the query and get java resultset
                     try (ResultSet rs = ps.executeQuery()) {
+                        var flag = 0;
                         while (rs.next()) {
                             song.setId(rs.getInt("id"));
                             song.setTitle(rs.getString("title"));
                             song.setArtist(rs.getString("artist"));
                             song.setGenre(Genre.valueOf(rs.getString("genre")));
                             song.setUploader(rs.getInt("uploader_id"));
+                            flag += 1;
+                        }
+                        if (flag < 1) {
+                            req.getRequestDispatcher("/WEB-INF/empty_results.jsp").forward(req, resp);
                         }
                     }
                 }
@@ -72,7 +77,7 @@ public class FindSongServlet extends HttpServlet {
                             level = "You're a semi-pro";
                             break;
                         case 5:
-                            level ="You're a pro";
+                            level = "You're a pro";
                             break;
                         default:
                             level = "Have you even listened?";
@@ -91,7 +96,6 @@ public class FindSongServlet extends HttpServlet {
                         }
                     }
                 }
-
 
 
             }

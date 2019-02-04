@@ -2,46 +2,39 @@ package com.alexbautista.charted;
 
 import com.alexbautista.charted.model.ConnectionFactory;
 import com.alexbautista.charted.model.ConnectionFactoryImpl;
-import com.alexbautista.charted.model.DigestMessage;
-import com.alexbautista.charted.model.DigestMessageImpl;
+import com.alexbautista.charted.model.PasswordHasher;
+import com.alexbautista.charted.model.PasswordHasherImpl;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 @WebServlet(
         name = "create_account",
-        urlPatterns = "/create_account"
+        urlPatterns = "/signup"
 )
 
-public class CreateAccount extends HttpServlet {
+public class CreateAccountServlet extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
-    private final DigestMessage digestMessage = new DigestMessageImpl();
+    private final PasswordHasher passwordHasher = new PasswordHasherImpl();
+
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
+    }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+            throws IOException, ServletException {
         var username = req.getParameter("user");
         var pass1 = req.getParameter("pass1");
         var pass2 = req.getParameter("pass2");
-        var e_pass = digestMessage.getDigest(pass1);
-        // encrypting password
-//        StringBuffer stringBuffer = new StringBuffer();
-//        MessageDigest messageDigest;
-//        try {
-//            messageDigest = MessageDigest.getInstance("MD5");
-//            messageDigest.update(pass1.getBytes());
-//            byte[] messageDigestMD5 = messageDigest.digest();
-//            for (byte bytes : messageDigestMD5) {
-//                stringBuffer.append(String.format("%02x", bytes & 0xff));
-//            }
-
-
+        var e_pass = passwordHasher.hashPassword(pass1);
 
         if (pass1.equals(pass2)) {
             try {
@@ -56,7 +49,7 @@ public class CreateAccount extends HttpServlet {
                         // execute the query and get java resultset
                         var result = ps.executeUpdate();
                         if (result == 1) {
-                            resp.sendRedirect("home.jsp");
+                            req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
                         } else {
                             System.out.println("Creating Error");
                         }

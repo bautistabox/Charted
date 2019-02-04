@@ -12,7 +12,7 @@
 </head>
 <body>
 <center>
-    <form method="post" action="/create_account">
+    <form method="post" action="/signup">
         <br><br><h1>Make an account</h1>
         <br><br><br>
         Enter your email: <input type="text" name="user"/>
