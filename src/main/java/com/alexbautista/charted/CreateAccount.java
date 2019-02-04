@@ -22,13 +22,14 @@ import java.sql.*;
 
 public class CreateAccount extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+    private final DigestMessage digestMessage = new DigestMessageImpl();
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         var username = req.getParameter("user");
         var pass1 = req.getParameter("pass1");
         var pass2 = req.getParameter("pass2");
-
+        var e_pass = digestMessage.getDigest(pass1);
         // encrypting password
 //        StringBuffer stringBuffer = new StringBuffer();
 //        MessageDigest messageDigest;
@@ -39,8 +40,8 @@ public class CreateAccount extends HttpServlet {
 //            for (byte bytes : messageDigestMD5) {
 //                stringBuffer.append(String.format("%02x", bytes & 0xff));
 //            }
-        DigestMessage digestMessage = new DigestMessageImpl();
-        var e_pass = digestMessage.getDigest(pass1);
+
+
 
         if (pass1.equals(pass2)) {
             try {

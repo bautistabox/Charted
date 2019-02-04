@@ -14,21 +14,20 @@ import java.io.PrintWriter;
 import java.sql.*;
 
 @WebServlet(
-        name="login_servlet",
+        name = "login_servlet",
         urlPatterns = "/loginServlet"
 )
 
 public class LoginServlet extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
+    private final DigestMessage digestMessage = new DigestMessageImpl();
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
         boolean status;
-
-        DigestMessage digestMessage = new DigestMessageImpl();
 
         String user = req.getParameter("username");
         String pass = digestMessage.getDigest(req.getParameter("userpass"));
@@ -48,13 +47,13 @@ public class LoginServlet extends HttpServlet {
             throw new RuntimeException(ex);
         }
 
-        if(status) {
+        if (status) {
             HttpSession session = req.getSession();
             session.setAttribute("user", "admin");
-            session.setMaxInactiveInterval(30*60);
+            session.setMaxInactiveInterval(30 * 60);
             Cookie userName = new Cookie("user", user);
             Cookie uID = new Cookie("uid", String.valueOf(userId));
-            userName.setMaxAge(30*60);
+            userName.setMaxAge(30 * 60);
             resp.addCookie(userName);
             resp.addCookie(uID);
             resp.sendRedirect("home.jsp");
