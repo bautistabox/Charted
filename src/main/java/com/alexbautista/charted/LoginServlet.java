@@ -2,6 +2,8 @@ package com.alexbautista.charted;
 
 import com.alexbautista.charted.model.ConnectionFactory;
 import com.alexbautista.charted.model.ConnectionFactoryImpl;
+import com.alexbautista.charted.model.DigestMessage;
+import com.alexbautista.charted.model.DigestMessageImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,8 +28,10 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         boolean status;
 
+        DigestMessage digestMessage = new DigestMessageImpl();
+
         String user = req.getParameter("username");
-        String pass = req.getParameter("userpass");
+        String pass = digestMessage.getDigest(req.getParameter("userpass"));
         int userId;
         try {
             try (Connection conn = connectionFactory.getConnection()) {
