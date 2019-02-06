@@ -1,11 +1,9 @@
 package com.alexbautista.charted.model;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class CheckInput {
     private static final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
@@ -13,7 +11,7 @@ public class CheckInput {
     public static boolean usernameExists(String username) {
         try {
             try (Connection conn = connectionFactory.getConnection()) {
-                var query = "SELECT * FROM user WHERE email=?";
+                var query = "SELECT * FROM user WHERE username=?";
                 try (PreparedStatement ps = conn.prepareStatement(query)) {
                     ps.setString(1, username);
                     try (ResultSet rs = ps.executeQuery()) {
@@ -21,7 +19,7 @@ public class CheckInput {
                         while (rs.next()) {
                             flag += 1;
                         }
-                        if(flag > 0)
+                        if (flag > 0)
                             return true;
                         else
                             return false;
@@ -33,11 +31,19 @@ public class CheckInput {
         }
     }
 
-    public static boolean checkPassword(String password) {
-        if (password.length() < 8) {
+    public static boolean isUsernameValidLength(String username) {
+        if (username.length() < 8 || username.length() > 20) {
             return false;
-        } else {
-            return true;
         }
+        return true;
+    }
+
+    public static boolean isUsernameValidChar(String username) {
+        return (username != null) && username.matches("[A-Za-z0-9_]+");
+    }
+
+    // TODO: make password criteria stronger
+    public static boolean checkPassword(String password) {
+        return password.matches("[\\S]{6,16}");
     }
 }

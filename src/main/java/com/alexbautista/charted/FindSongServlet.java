@@ -51,13 +51,13 @@ public class FindSongServlet extends HttpServlet {
                     }
                 }
                 // get the uploader's username
-                var query3 = "SELECT email FROM user WHERE id=?";
+                var query3 = "SELECT username FROM user WHERE id=?";
                 try (PreparedStatement ps = conn.prepareStatement(query3)) {
                     ps.setInt(1, song.getUploader());
 
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
-                            uploader = rs.getString("email");
+                            uploader = rs.getString("username");
                         }
                     }
                 }

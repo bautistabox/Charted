@@ -6,9 +6,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.swing.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.*;
 
 @WebServlet(
@@ -21,29 +19,25 @@ public class LoginServlet extends HttpServlet {
     private final PasswordHasher passwordHasher = new PasswordHasherImpl();
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
     }
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
-        boolean status;
-
         String user = req.getParameter("username");
         String pass = passwordHasher.hashPassword(req.getParameter("userpass"));
-
-        int userId;
+        int userId = 0;
+        String userPass = null;
         try {
             try (Connection conn = connectionFactory.getConnection()) {
-                try (PreparedStatement ps = conn.prepareStatement("select * from user where email=? and pass=?")) {
+                try (PreparedStatement ps = conn.prepareStatement("select id, pass from user where username=?")) {
                     ps.setString(1, user);
-                    ps.setString(2, pass);
                     try (ResultSet rs = ps.executeQuery()) {
-                        status = rs.next();
-                        userId = rs.getInt("id");
+                        while (rs.next()) {
+                            userPass = rs.getString("pass");
+                            userId = rs.getInt("id");
+                        }
                     }
                 }
             }
@@ -51,21 +45,29 @@ public class LoginServlet extends HttpServlet {
             throw new RuntimeException(ex);
         }
 
-        if (status) {
-            HttpSession session = req.getSession();
-            session.setAttribute("user", "admin");
-            session.setMaxInactiveInterval(30 * 60);
-            Cookie userName = new Cookie("user", user);
-            Cookie uID = new Cookie("uid", String.valueOf(userId));
-            userName.setMaxAge(30 * 60);
-            resp.addCookie(userName);
-            resp.addCookie(uID);
-            req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
-        } else {
-            req.setAttribute("error", "password error");
-            RequestDispatcher rd = req.getRequestDispatcher("index.js");
-            rd.include(req, resp);
+        if(!CheckInput.usernameExists(user)) {
+            var usernameErrorMessage = "Username doesn't exist";
+            req.setAttribute("errorMessage", usernameErrorMessage);
+            req.getRequestDispatcher("/").forward(req, resp);
+            return;
         }
-        out.close();
+
+        if (!pass.equals(userPass)) {
+            var passwordErrorMessage = "Incorrect Username or Password";
+            req.setAttribute("errorMessage", passwordErrorMessage);
+            req.getRequestDispatcher("/").forward(req, resp);
+            return;
+        }
+
+        HttpSession session = req.getSession();
+        session.setAttribute("user", "admin");
+        session.setMaxInactiveInterval(30 * 60);
+        Cookie userName = new Cookie("user", user);
+        Cookie uID = new Cookie("uid", String.valueOf(userId));
+        userName.setMaxAge(30 * 60);
+        resp.addCookie(userName);
+        resp.addCookie(uID);
+        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+
     }
 }

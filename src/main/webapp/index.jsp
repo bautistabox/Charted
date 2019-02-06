@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +26,13 @@
     <h1 align="center" class="display-3" style="color:white">Welcome to Charted</h1>
     <h6 align="center" style="color:white">Please Login or Sign up</h6>
     <br><br><br>
+    <div align="center">
+        <c:if test="${not empty errorMessage}">
+        <span style="color: white">
+            <c:out value="${errorMessage}"/>
+        </span>
+        </c:if>
+    </div>
     <form action="home" method="post">
         <table align="center" style="border-collapse:separate; border-spacing:0 7px;">
             <tr>

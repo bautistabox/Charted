@@ -49,6 +49,7 @@ public class AddSongServlet extends HttpServlet {
                         }
                         if (flag >= 1) {
                             req.getRequestDispatcher("/WEB-INF/exists.jsp").forward(req, resp);
+                            return;
                         }
                     }
                 }
