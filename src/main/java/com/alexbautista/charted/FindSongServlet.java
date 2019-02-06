@@ -25,7 +25,6 @@ public class FindSongServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var songQuery = req.getParameter("searched_song");
         Song song = new Song();
-        var level = "";
         var uploader = "";
 
         try {
@@ -51,40 +50,6 @@ public class FindSongServlet extends HttpServlet {
                         }
                     }
                 }
-                var query2 = "SELECT mastery_level FROM song_mastery WHERE song_id=? AND user_id=?";
-                try (PreparedStatement ps = conn.prepareStatement(query2)) {
-                    ps.setInt(1, song.getId());
-                    ps.setInt(2, song.getUploader()); // need to change this to session user
-                    var levelInt = 0;
-
-                    try (ResultSet rs = ps.executeQuery()) {
-                        while (rs.next()) {
-                            levelInt = rs.getInt("mastery_level");
-                        }
-                    }
-
-                    switch (levelInt) {
-                        case 1:
-                            level = "You've listened to it";
-                            break;
-                        case 2:
-                            level = "You're an amateur";
-                            break;
-                        case 3:
-                            level = "You're average";
-                            break;
-                        case 4:
-                            level = "You're a semi-pro";
-                            break;
-                        case 5:
-                            level = "You're a pro";
-                            break;
-                        default:
-                            level = "Have you even listened?";
-                            break;
-                    }
-
-                }
                 // get the uploader's username
                 var query3 = "SELECT email FROM user WHERE id=?";
                 try (PreparedStatement ps = conn.prepareStatement(query3)) {
@@ -96,19 +61,19 @@ public class FindSongServlet extends HttpServlet {
                         }
                     }
                 }
-
-
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+
+        Cookie cookie = new Cookie("song_id", String.valueOf(song.getId()));
+        resp.addCookie(cookie);
 
         req.setAttribute("id", song.getId());
         req.setAttribute("title", song.getTitle());
         req.setAttribute("artist", song.getArtist());
         req.setAttribute("genre", song.getGenre());
         req.setAttribute("uploader", uploader);
-        req.setAttribute("level", level);
         req.getRequestDispatcher("/WEB-INF/song_page.jsp").forward(req, resp);
     }
 }

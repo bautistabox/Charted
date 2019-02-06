@@ -59,6 +59,7 @@ public class CreateAccountServlet extends HttpServlet {
                 throw new RuntimeException(ex);
             }
         } else {
+            System.out.println("pass1: "+ pass1 + "\npass2: "+pass2);
             PrintWriter out = resp.getWriter();
             out.print("Passwords do not match");
         }

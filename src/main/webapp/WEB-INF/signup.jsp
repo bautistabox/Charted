@@ -9,22 +9,45 @@
 <html>
 <head>
     <title>Sign Up</title>
+    <link href="bootstrap.css" type="text/css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .bg {
+            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 <body>
-<center>
-    <form method="post" action="/signup">
-        <br><br><h1>Make an account</h1>
-        <br><br><br>
-        Enter your email: <input type="text" name="user"/>
-        <br><br>
-        Enter your password: <input type="password" name="pass1"/>
-        <br><br>
-        Retype your password: <input type="password" name="pass2"/>
-        <br><br>
-        <input type="submit" value="Create Account">
+<div class="bg" align="center">
+    <br>
+    <a class="btn btn-danger" href="javascript:history.back()">Go Back</a>
+    <br><br><br>
+    <h1 align="center" class="display-3" style="color:white">Make an Account</h1>
+    <br><br><br>
+
+    <form action="/signup" method="post">
+        <table align="center" style="border-collapse:separate; border-spacing:0 7px;">
+            <tr>
+                <td><input type="text" name="user" placeholder="Username" class="form-control" required/></td>
+            </tr>
+            <tr>
+                <td><input type="password" name="pass1" placeholder="Password" class="form-control" required/></td>
+            </tr>
+            <tr>
+                <td><input type="password" name="pass2" placeholder="Verify Password" class="form-control" required/></td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="Sign Up" class="btn btn-primary"
+               style="background-color:#3CB371; border-color:#3CB371"/>
     </form>
-    <br><br>
-    <a href="javascript:history.back()">Go Back</a>
-</center>
+</div>
 </body>
 </html>

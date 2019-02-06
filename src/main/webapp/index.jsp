@@ -3,19 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Charted</title>
+    <link href="bootstrap.css" type="text/css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .bg {
+            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 <body>
-<center>
-    <br>
-    <h1>Welcome to Charted</h1>
+<div class="bg">
+    <br><br><br><br><br>
+    <h1 align="center" class="display-3" style="color:white">Welcome to Charted</h1>
+    <h6 align="center" style="color:white">Please Login or Sign up</h6>
     <br><br><br>
     <form action="home" method="post">
-        Email: <input type="text" name="username"/><br><br>
-        Password: <input type="password" name="userpass"/><br><br>
-        <input type="submit" value="login"/>
+        <table align="center" style="border-collapse:separate; border-spacing:0 7px;">
+            <tr>
+                <td><input type="text" name="username" placeholder="Username" class="form-control" required/></td>
+            </tr>
+            <tr>
+                <td><input type="password" name="userpass" placeholder="Password" class="form-control" required/></td>
+            </tr>
+        </table>
+        <br>
+        <div align="center">
+            <input type="submit" value="Login" class="btn btn-primary"
+                   style="background-color:#3CB371; border-color:#3CB371"/>
+            <a href="/signup" class="btn btn-primary" style="background-color:#3CB371; border-color:#3CB371">Sign Up</a>
+        </div>
     </form>
     <br>
-    <a href="/signup">Sign Up</a>
-</center>
+</div>
 </body>
 </html>
