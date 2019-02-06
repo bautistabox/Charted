@@ -1,9 +1,6 @@
 package com.alexbautista.charted;
 
-import com.alexbautista.charted.model.ConnectionFactory;
-import com.alexbautista.charted.model.ConnectionFactoryImpl;
-import com.alexbautista.charted.model.Genre;
-import com.alexbautista.charted.model.Song;
+import com.alexbautista.charted.model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -30,18 +27,7 @@ public class AddSongServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        var masteryLevel = Integer.valueOf(req.getParameter("knowledgeLevel"));
-
-        Cookie ck[] = req.getCookies();
-        int uId = 0;
-        System.out.println(ck[0].getValue());
-
-        for (var c : ck) {
-            if (c.getName().equals("uid")) {
-                uId = Integer.valueOf(c.getValue());
-            }
-        }
+        int uId = Integer.valueOf(CookieJar.getCookieValue("uid", req));
 
         Song song = new Song(
                 req.getParameter("songTitle"),
@@ -49,6 +35,27 @@ public class AddSongServlet extends HttpServlet {
                 Genre.valueOf(req.getParameter("songGenre")),
                 uId
         );
+
+        // check if song with same title already exists
+        try {
+            try (Connection conn = connectionFactory.getConnection()) {
+                try (PreparedStatement ps = conn.prepareStatement("SELECT title FROM song WHERE title=?")) {
+                    ps.setString(1, song.getTitle());
+                    try(ResultSet rs = ps.executeQuery()) {
+                        var flag = 0;
+                        while (rs.next()) {
+                            req.setAttribute("title", rs.getString("title"));
+                            flag += 1;
+                        }
+                        if (flag >= 1) {
+                            req.getRequestDispatcher("/WEB-INF/exists.jsp").forward(req, resp);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
 
         //file input
         InputStream inputStream = null; // input stream of the upload file
@@ -66,7 +73,6 @@ public class AddSongServlet extends HttpServlet {
         }
 
         try {
-            int song_id = 0;
             try (Connection conn = connectionFactory.getConnection()) {
                 var query1 = "INSERT INTO song (title, artist, genre, file, uploader_id) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(query1)) {
@@ -76,44 +82,16 @@ public class AddSongServlet extends HttpServlet {
                     ps.setInt(5, song.getUploader());
 
                     if (inputStream != null) {
-                        System.out.println("input stream is not null");
                         ps.setBlob(4, inputStream);
                     } else {
                         System.out.println("Input stream IS null");
                     }
-
-                    var row = ps.executeUpdate();
-
-                    if (row >= 1) {
+                    var status = ps.executeUpdate();
+                    if (status >= 1) {
                         System.out.println("Song Added");
-                    } else {
-                        System.out.println("Error Adding Song");
-                    }
-
-                }
-                var query2 = "select id from song where title=?";
-                try (PreparedStatement ps = conn.prepareStatement(query2)) {
-                    ps.setString(1, song.getTitle());
-
-                    try (var rs = ps.executeQuery()) {
-                        while (rs.next()) {
-                            song_id = rs.getInt("id");
-                        }
-                    }
-                }
-                var query3 = "INSERT INTO song_mastery (song_id, user_id, mastery_level) VALUES (?,?,?)";
-                try (PreparedStatement ps = conn.prepareStatement(query3)) {
-                    ps.setInt(1, song_id);
-                    ps.setInt(2, song.getUploader());
-                    ps.setInt(3, masteryLevel);
-
-                    var row = ps.executeUpdate();
-
-                    if (row >= 1) {
-                        System.out.println("Level Added");
                         req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
                     } else {
-                        System.out.println("Error Adding Level");
+                        System.out.println("Error Adding Song");
                     }
                 }
             }

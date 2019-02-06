@@ -8,63 +8,58 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
 <head>
-    <title>${title}</title>
+    <title>Updating &nbsp;${title}</title>
+    <link href="bootstrap.css" type="text/css" rel="stylesheet">
     <style>
-        table, th, td {
-            border: 1px solid black;
+        body, html {
+            height: 100%;
         }
-
-        divTop {
-            border-bottom: 1px solid black;
+        .bg {
+            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
 <body>
-<center>
+<div align="center" class="bg">
     <br>
-    <divTop>
-        <a href="/LogoutServlet">Logout</a>
-        &nbsp;&nbsp;
-        <a href="/home">Home</a>
-    </divTop>
-    <br><br>
-    <h4>Please Refill Fields</h4>
-</center>
+    <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
+    &nbsp;&nbsp;
+    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
 
-<table style="width:100%">
-    <tr>
-        <th>Title</th>
-        <th>Artist</th>
-        <th>Genre</th>
-        <th>How Well You Know It</th>
-        <th>PDF</th>
-        <th>Uploaded By</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tr>
-        <form method="post" action="update_song" enctype="multipart/form-data">
-            <td><input type="text" name="songTitle" placeholder="${title}"/></td>
-            <td><input type="text" name="songArtist" placeholder="${artist}"/></td>
-            <td><select name="songGenre" size="1">
-                <option value="JAZZ">Jazz</option>
-                <option value="BLUES">Blues</option>
-                <option value="ROCK">Rock</option>
-            </select></td>
-            <td><select name="knowledgeLevel" size="1">
-                <option value="1">I've listened to it...</option>
-                <option value="2">I'm an amateur</option>
-                <option value="3">I'm average!</option>
-                <option value="4">I'm a semi-pro</option>
-                <option value="5">I'm a pro</option>
-            </select></td>
-            <td><input type="file" name="upload" accept="application/pdf"/></td>
+    <br><br><br><br><br><br>
+    <h4 class="display-4" style="color: #fff;">Please Refill Fields</h4>
 
-            <td>${uploader}</td>
-            <td><input type="submit" value="save"/></td>
-        </form>
-        <td><a href="/delete?song_id=${id}">Delete</a></td>
-    </tr>
-</table>
+
+    <table style="width:75%" class="table table-bordered table-dark">
+        <tr align="center">
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Genre</th>
+            <th>PDF - Null entries remain unchanged</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr align="center">
+            <form method="post" action="/update" enctype="multipart/form-data">
+                <td><input type="text" name="newSongTitle" value="${oldTitle}" class="form-control" placeholder="Title" required/></td>
+                <td><input type="text" name="newSongArtist" value="${oldArtist}" class="form-control" required placeholder="Artist"/></td>
+                <td><select name="newSongGenre" size="1" class="form-control">
+                    <option value="JAZZ">Jazz</option>
+                    <option value="BLUES">Blues</option>
+                    <option value="ROCK">Rock</option>
+                </select></td>
+                <td><input type="file" name="upload" accept="application/pdf"/></td>
+                <td><input type="submit" value="Save" class="btn btn-success"/></td>
+                <td><a class="btn btn-warning" href="javascript:history.back()">Undo</a></td>
+            </form>
+            <td><a class="btn btn-danger" href="/delete?song_id=${id}">Delete</a></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

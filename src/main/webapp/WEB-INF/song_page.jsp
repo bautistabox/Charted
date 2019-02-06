@@ -9,57 +9,61 @@
 <html>
 <head>
     <title>${title}</title>
+    <link href="bootstrap.css" type="text/css" rel="stylesheet">
     <style>
-        table, th, td {
-            border: 1px solid black;
-            text-align: center;
+        body, html {
+            height: 100%;
         }
 
-        divTop {
-            border-bottom: 1px solid black;
-            text-align: center;
+        .bg {
+            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
 <body>
-<br>
-<divTop>
-    <a href="/LogoutServlet">Logout</a>
+<div align="center" class="bg">
+    <br>
+    <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
     &nbsp;&nbsp;
-    <a href="/home">Home</a>
-</divTop>
+    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
 
-<table style="width:100%">
-    <tr>
-        <th>Title</th>
-        <th>Artist</th>
-        <th>Genre</th>
-        <th>How Well You Know It</th>
-        <th>PDF</th>
-        <th>Uploaded By</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tr>
-        <td>${title}</td>
-        <td>${artist}</td>
-        <td>${genre}</td>
-        <th>${level}</th>
-        <td><a href="download_song?song_id=${id}">Download PDF</a></td>
-        <td>${uploader}</td>
-        <td>
-            <form method="get" action="/update">
-                <input type="submit" value="Update"/>
-                <input type="hidden" name="secret_id" value="${id}"/>
-            </form>
-        </td>
-        <td>
-            <form method="post" action="/delete">
-                <input type="submit" value="Delete"/>
-                <input type="hidden" name="secret_id" value="${id}"/>
-            </form>
-        </td>
-    </tr>
-</table>
+    <br><br><br><br><br><br>
+
+
+    <table style="width:75%" class="table table-bordered table-dark">
+        <tr align="center">
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Genre</th>
+            <th>PDF</th>
+            <th>Uploaded By</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr align="center">
+            <td>${title}</td>
+            <td>${artist}</td>
+            <td>${genre}</td>
+            <td><a href="download_song?song_id=${id}">Download PDF</a></td>
+            <td>${uploader}</td>
+            <td align="center">
+                <form method="get" action="/update">
+                    <input type="submit" value="Update" class="btn btn-warning"/>
+                    <input type="hidden" name="secret_id" value="${id}"/>
+                </form>
+            </td>
+            <td align="center">
+                <form method="post" action="/delete">
+                    <input type="submit" value="Delete" class="btn btn-danger"/>
+                    <input type="hidden" name="secret_id" value="${id}"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

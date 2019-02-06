@@ -1,14 +1,12 @@
 package com.alexbautista.charted;
 
-import com.alexbautista.charted.model.ConnectionFactory;
-import com.alexbautista.charted.model.ConnectionFactoryImpl;
-import com.alexbautista.charted.model.PasswordHasher;
-import com.alexbautista.charted.model.PasswordHasherImpl;
+import com.alexbautista.charted.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -36,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 
         String user = req.getParameter("username");
         String pass = passwordHasher.hashPassword(req.getParameter("userpass"));
+
         int userId;
         try {
             try (Connection conn = connectionFactory.getConnection()) {

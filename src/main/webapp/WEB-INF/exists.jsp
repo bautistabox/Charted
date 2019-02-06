@@ -1,11 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: alexb
-  Date: 2/4/2019
-  Time: 3:47 PM
+  Date: 2/6/2019
+  Time: 9:33 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
 <head>
     <title>No Results Found</title>
@@ -36,8 +36,8 @@
 
 
     <br><br><br><br><br><br>
-    <h2 class="display-4" style="color: white;">No Results found, <a style="color: navajowhite" href="/home">Try
-        Again</a></h2>
+    <h2 style="color: white;">Song named ${title} already exists, <a style="color: navajowhite" href="/home">Try
+        searching that title</a></h2>
 </div>
 </body>
 </html>

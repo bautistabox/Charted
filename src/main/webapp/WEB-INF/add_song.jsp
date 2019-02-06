@@ -9,57 +9,60 @@
 <html>
 <head>
     <title>Add a Song</title>
+    <link href="bootstrap.css" type="text/css" rel="stylesheet">
     <style>
-        divTop {
-            border-bottom: 1px solid black;
+        body, html {
+            height: 100%;
+        }
+
+        .bg {
+            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
 <body>
-<center>
-    <divTop>
-        <br>
-        <a href="/LogoutServlet">Logout</a>
-        &nbsp;&nbsp;
-        <a href="/home">Home</a>
-    </divTop>
+<div class="bg" align="center">
     <br>
-    <h1>Add a Song</h1>
-    <br><br>
-    <form method="post" action="/add_song" enctype="multipart/form-data">
-        <input type="text" name="songTitle" placeholder="Title">
-        <br><br>
-        <input type="text" name="songArtist" placeholder="Artist">
-        <br><br>
-        <select name="songGenre" size="1">
-            <option value="JAZZ">Jazz</option>
-            <option value="BLUES">Blues</option>
-            <option value="ROCK">Rock</option>
-        </select>
-        <br><br>
-        <div>
-            <h4>How well do you know this song?</h4>
-            <input type="radio" id="radioOne" name="knowledgeLevel" value="1" checked>
-            <label for="radioOne">I've listened to it...</label>
-            <br>
-            <input type="radio" id="radioTwo" name="knowledgeLevel" value="2">
-            <label for="radioTwo">I'm an amateur</label>
-            <br>
-            <input type="radio" id="radioThree" name="knowledgeLevel" value="3">
-            <label for="radioThree">I'm average!</label>
-            <br>
-            <input type="radio" id="radioFour" name="knowledgeLevel" value="4">
-            <label for="radioFour">I'm a semi-pro</label>
-            <br>
-            <input type="radio" id="radioFive" name="knowledgeLevel" value="5">
-            <label for="radioFive">I'm a pro</label>
-        </div>
+    <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
+    &nbsp;&nbsp;
+    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
 
-        <br><br>
-        <input type="file" name="upload" accept="application/pdf"/>
-        <br><br><br><br>
-        <input type="submit" value="Add">
-    </form>
-</center>
+    <br><br><br>
+    <div style="width: 60%;">
+        <form method="post" action="/add_song" enctype="multipart/form-data">
+            <table class="table table-bordered table-dark">
+                <caption style="caption-side: top; text-align: center; color: white;"><h1 class="display-4">Add a
+                    Song</h1></caption>
+                <br><br>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" name="songTitle" placeholder="Title" class="form-control" required>
+                    </td>
+                    <td>
+                        <input type="text" name="songArtist" placeholder="Artist" class="form-control required">
+                    </td>
+                    <td>
+                        <select name="songGenre" size="1" class="form-control">
+                            <option value="JAZZ">Jazz</option>
+                            <option value="BLUES">Blues</option>
+                            <option value="ROCK">Rock</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="file" name="upload" accept="application/pdf" style="color: white;" required/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <input type="submit" value="Add" class="btn btn-primary"
+                   style="background-color: #3CB371; border-color: #3CB371;"/>
+        </form>
+    </div>
+</div>
 </body>
 </html>
