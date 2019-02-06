@@ -35,7 +35,9 @@
     <form action="/signup" method="post">
         <table align="center" style="border-collapse:separate; border-spacing:0 7px;">
             <tr>
-                <td><input type="text" name="user" placeholder="Username" class="form-control" required/></td>
+                <td>
+                    <input type="text" name="user" placeholder="Username" class="form-control" required />
+                </td>
             </tr>
             <tr>
                 <td><input type="password" name="pass1" placeholder="Password" class="form-control" required/></td>
