@@ -15,7 +15,7 @@
             height: 100%;
         }
         .bg {
-            background-image: url("https://www.maxpixel.net/static/photo/1x/Music-Instruments-On-Table-Musical-Background-2842924.jpg");
+            background-image: url("../Charted_Background.jpg");
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
