@@ -1,4 +1,4 @@
-package com.alexbautista.charted.model;
+package com.alexbautista.charted.account;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

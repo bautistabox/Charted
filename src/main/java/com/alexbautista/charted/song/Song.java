@@ -1,4 +1,4 @@
-package com.alexbautista.charted.model;
+package com.alexbautista.charted.song;
 
 public class Song {
 

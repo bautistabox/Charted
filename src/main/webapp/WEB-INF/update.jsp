@@ -28,7 +28,7 @@
     <br>
     <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
     &nbsp;&nbsp;
-    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
+    <a class="btn btn-danger" href="/logout">Logout</a>
 
     <br><br><br><br><br><br>
     <h4 class="display-4" style="color: #fff;">Update</h4>
@@ -46,6 +46,7 @@
         </tr>
         <tr align="center">
             <form method="post" action="/update" enctype="multipart/form-data">
+                <input type="hidden" name="songId" value="${id}">
                 <td><input type="text" name="newSongTitle" value="${oldTitle}" class="form-control" placeholder="Title" required/></td>
                 <td><input type="text" name="newSongArtist" value="${oldArtist}" class="form-control" required placeholder="Artist"/></td>
                 <td><select name="newSongGenre" size="1" class="form-control">

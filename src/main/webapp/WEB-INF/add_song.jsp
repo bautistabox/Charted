@@ -29,7 +29,7 @@
     <br>
     <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
     &nbsp;&nbsp;
-    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
+    <a class="btn btn-danger" href="/logout">Logout</a>
 
     <br><br><br>
     <div style="width: 60%;">

@@ -1,7 +1,7 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.song;
 
-import com.alexbautista.charted.model.ConnectionFactory;
-import com.alexbautista.charted.model.ConnectionFactoryImpl;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,24 +20,25 @@ public class DeleteSongServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         try {
             try (Connection conn = connectionFactory.getConnection()) {
                 var query = "DELETE FROM song where id=?";
                 try (PreparedStatement ps = conn.prepareStatement(query)) {
-                    ps.setInt(1, Integer.valueOf(req.getParameter("secret_id")));
+                    ps.setInt(1, Integer.valueOf(req.getParameter("songId")));
                     if (ps.executeUpdate() < 1) {
                         System.out.println("error in deleting song");
                     }
-                    req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+                    resp.sendRedirect("/home");
                 }
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException {
-        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
     }
 }

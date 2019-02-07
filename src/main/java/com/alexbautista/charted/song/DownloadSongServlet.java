@@ -1,7 +1,7 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.song;
 
-import com.alexbautista.charted.model.ConnectionFactory;
-import com.alexbautista.charted.model.ConnectionFactoryImpl;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +22,12 @@ public class DownloadSongServlet extends HttpServlet {
     ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         try {
             try (Connection conn = connectionFactory.getConnection()) {
                 try (PreparedStatement ps = conn.prepareStatement("SELECT file from song where id = ?")) {

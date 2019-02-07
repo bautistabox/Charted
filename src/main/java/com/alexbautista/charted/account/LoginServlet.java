@@ -1,8 +1,8 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.account;
 
-import com.alexbautista.charted.model.*;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -60,14 +60,9 @@ public class LoginServlet extends HttpServlet {
         }
 
         HttpSession session = req.getSession();
-        session.setAttribute("user", "admin");
+        session.setAttribute("userId", userId);
+        session.setAttribute("username", user);
         session.setMaxInactiveInterval(30 * 60);
-        Cookie userName = new Cookie("user", user);
-        Cookie uID = new Cookie("uid", String.valueOf(userId));
-        userName.setMaxAge(30 * 60);
-        resp.addCookie(userName);
-        resp.addCookie(uID);
-        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
-
+        resp.sendRedirect("/home");
     }
 }

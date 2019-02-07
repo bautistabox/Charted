@@ -1,6 +1,7 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.song;
 
-import com.alexbautista.charted.model.*;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,18 +23,28 @@ public class AddSongServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         req.getRequestDispatcher("/WEB-INF/add_song.jsp").forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        int uId = Integer.valueOf(CookieJar.getCookieValue("uid", req));
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
 
         Song song = new Song(
                 req.getParameter("songTitle"),
                 req.getParameter("songArtist"),
                 Genre.valueOf(req.getParameter("songGenre")),
-                uId
+                (int)session.getAttribute("userId")
         );
 
         // check if song with same title already exists
@@ -85,7 +96,7 @@ public class AddSongServlet extends HttpServlet {
                     var status = ps.executeUpdate();
                     if (status >= 1) {
                         System.out.println("Song Added");
-                        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+                        resp.sendRedirect("/home");
                     } else {
                         System.out.println("Error Adding Song");
                     }

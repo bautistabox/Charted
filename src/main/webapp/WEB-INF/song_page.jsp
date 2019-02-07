@@ -29,7 +29,7 @@
     <br>
     <a class="btn btn-primary" style="background-color: #3CB371; border-color: #3CB371" href="/home">Home</a>
     &nbsp;&nbsp;
-    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
+    <a class="btn btn-danger" href="/logout">Logout</a>
 
     <br><br><br><br><br><br>
 
@@ -53,13 +53,13 @@
             <td align="center">
                 <form method="get" action="/update">
                     <input type="submit" value="Update" class="btn btn-warning"/>
-                    <input type="hidden" name="secret_id" value="${id}"/>
+                    <input type="hidden" name="songId" value="${id}"/>
                 </form>
             </td>
             <td align="center">
                 <form method="post" action="/delete">
                     <input type="submit" value="Delete" class="btn btn-danger"/>
-                    <input type="hidden" name="secret_id" value="${id}"/>
+                    <input type="hidden" name="songId" value="${id}"/>
                 </form>
             </td>
         </tr>

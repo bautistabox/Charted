@@ -1,3 +1,11 @@
+create table user
+(
+  id int auto_increment
+    primary key,
+  username varchar(255) not null,
+  pass varchar(64) not null
+);
+
 create table song
 (
   id int auto_increment
@@ -5,24 +13,13 @@ create table song
   title varchar(45) not null,
   artist varchar(45) not null,
   genre enum('JAZZ', 'BLUES', 'ROCK') not null,
-  file blob not null,
-  uploader_id int not null
+  file longblob not null,
+  uploader_id int not null,
+  constraint song_ibfk_1
+    foreign key (uploader_id) references user (id)
 );
 
-create table song_mastery
-(
-  know_id int auto_increment
-    primary key,
-  song_id int not null,
-  user_id int not null,
-  mastery_level tinyint not null
-);
+create index uploader_id
+  on song (uploader_id);
 
-create table user
-(
-  id int auto_increment
-    primary key,
-  email varchar(255) not null,
-  pass varchar(64) not null
-);
 

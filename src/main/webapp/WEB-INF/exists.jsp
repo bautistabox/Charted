@@ -32,7 +32,7 @@
     <a class="btn btn-primary" style="background-color: mediumseagreen; border-color: mediumseagreen"
        href="/home">Home</a>
     &nbsp;&nbsp;
-    <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
+    <a class="btn btn-danger" href="/logout">Logout</a>
 
 
     <br><br><br><br><br><br>

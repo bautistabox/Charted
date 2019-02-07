@@ -1,6 +1,7 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.song;
 
-import com.alexbautista.charted.model.*;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -9,7 +10,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
-import java.util.Enumeration;
 
 @WebServlet(urlPatterns = "/update")
 @MultipartConfig(maxFileSize = 16177215)
@@ -17,11 +17,11 @@ import java.util.Enumeration;
 public class UpdateSongServlet extends HttpServlet {
     ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
 
-    public void updateStatus(int status, HttpServletRequest req, HttpServletResponse resp)
+    private void updateStatus(int status, HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         if (status >= 1) {
             System.out.println("Song Updated");
-            req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+            resp.sendRedirect("/home");
         } else {
             System.out.println("Error Updating Song");
         }
@@ -30,10 +30,16 @@ public class UpdateSongServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         Song song = new Song();
         resp.setContentType("text/html");
 
-        song.setId(Integer.valueOf(CookieJar.getCookieValue("song_id", req)));
+        song.setId(Integer.valueOf(req.getParameter("songId")));
 
         try (Connection conn = connectionFactory.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(
@@ -58,11 +64,17 @@ public class UpdateSongServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         Song song = new Song();
+        song.setId(Integer.valueOf(req.getParameter("songId")));
         song.setTitle(req.getParameter("newSongTitle"));
         song.setArtist(req.getParameter("newSongArtist"));
         song.setGenre(Genre.valueOf(req.getParameter("newSongGenre")));
-        song.setId(Integer.valueOf(CookieJar.getCookieValue("song_id", req)));
 
         InputStream is = null;
         Part filePart = req.getPart("upload");

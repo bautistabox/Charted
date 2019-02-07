@@ -22,7 +22,7 @@
 <div class="bg">
     <br>
     <div align="center">
-        <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
+        <a class="btn btn-danger" href="/logout">Logout</a>
 
         <br><br><br>
         <h1 align="center" class="display-3" style="color:white">Welcome to Charted</h1>

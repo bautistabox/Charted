@@ -1,8 +1,7 @@
-package com.alexbautista.charted.model;
+package com.alexbautista.charted.http;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class CookieJar {
     public static String getCookieValue(String name, HttpServletRequest req) {

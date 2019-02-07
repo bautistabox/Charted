@@ -1,12 +1,14 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.account;
 
-import com.alexbautista.charted.model.*;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
 
@@ -79,9 +81,22 @@ public class CreateAccountServlet extends HttpServlet {
                     // execute the query and get java resultset
                     var result = ps.executeUpdate();
                     if (result == 1) {
-                        req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
+                        try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT id FROM user WHERE username=?")) {
+                            preparedStatement.setString(1, username);
+                            ResultSet rs = preparedStatement.executeQuery();
+                            var userId = 0;
+                            while (rs.next()) {
+                                userId = rs.getInt("id");
+                            }
+
+                            HttpSession session = req.getSession();
+                            session.setAttribute("userId", userId);
+                            session.setAttribute("username", username);
+                            session.setMaxInactiveInterval(30 * 60);
+                            resp.sendRedirect("/home");
+                        }
                     } else {
-                        System.out.println("Creating Error");
+                        System.out.println("Error Creating user");
                     }
                 }
             }

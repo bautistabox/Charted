@@ -1,4 +1,7 @@
-package com.alexbautista.charted.model;
+package com.alexbautista.charted.account;
+
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

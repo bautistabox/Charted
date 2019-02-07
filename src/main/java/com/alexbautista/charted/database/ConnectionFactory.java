@@ -1,4 +1,4 @@
-package com.alexbautista.charted.model;
+package com.alexbautista.charted.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,16 +1,11 @@
-package com.alexbautista.charted;
+package com.alexbautista.charted.song;
 
-import com.alexbautista.charted.model.ConnectionFactory;
-import com.alexbautista.charted.model.ConnectionFactoryImpl;
-import com.alexbautista.charted.model.Genre;
-import com.alexbautista.charted.model.Song;
+import com.alexbautista.charted.database.ConnectionFactory;
+import com.alexbautista.charted.database.ConnectionFactoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 
@@ -23,6 +18,12 @@ public class FindSongServlet extends HttpServlet {
     private final ConnectionFactory connectionFactory = new ConnectionFactoryImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.sendRedirect("/");
+            return;
+        }
+
         var songQuery = req.getParameter("searched_song");
         Song song = new Song();
         var uploader = "";
@@ -65,9 +66,6 @@ public class FindSongServlet extends HttpServlet {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
-        Cookie cookie = new Cookie("song_id", String.valueOf(song.getId()));
-        resp.addCookie(cookie);
 
         req.setAttribute("id", song.getId());
         req.setAttribute("title", song.getTitle());
