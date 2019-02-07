@@ -58,7 +58,6 @@ public class CreateAccountServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("pass1: " + pass1 + "\npass2: " + pass2);
         if (!(CheckInput.checkPassword(pass1))) {
             var passwordErrorMessage = "Password must be between 6 and 16 characters and include one numeric digit";
             req.setAttribute("errorMessage", passwordErrorMessage);

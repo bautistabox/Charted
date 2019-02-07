@@ -96,7 +96,6 @@ public class UpdateSongServlet extends HttpServlet {
                         var status = ps.executeUpdate();
                         updateStatus(status, req, resp);
                     }
-                    System.out.println("update DID NOT include file upload");
                 }
             }
         } catch (SQLException ex) {

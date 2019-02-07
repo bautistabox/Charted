@@ -28,7 +28,7 @@
     <br><br><br>
     <div align="center">
         <c:if test="${not empty errorMessage}">
-        <span style="color: white">
+        <span style="color: gold">
             <c:out value="${errorMessage}"/>
         </span>
         </c:if>

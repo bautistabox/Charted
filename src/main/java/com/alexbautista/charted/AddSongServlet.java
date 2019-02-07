@@ -64,11 +64,6 @@ public class AddSongServlet extends HttpServlet {
         // obtain the upload file part in this multipart request
         Part filePart = req.getPart("upload");
         if (filePart != null) {
-            // prints out some information for debugging
-            System.out.println(filePart.getName());
-            System.out.println(filePart.getSize());
-            System.out.println(filePart.getContentType());
-
             // obtains input stream of the upload file
             inputStream = filePart.getInputStream();
         }

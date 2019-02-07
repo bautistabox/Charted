@@ -31,7 +31,7 @@
     <a class="btn btn-danger" href="/LogoutServlet">Logout</a>
 
     <br><br><br><br><br><br>
-    <h4 class="display-4" style="color: #fff;">Please Refill Fields</h4>
+    <h4 class="display-4" style="color: #fff;">Update</h4>
 
 
     <table style="width:75%" class="table table-bordered table-dark">
