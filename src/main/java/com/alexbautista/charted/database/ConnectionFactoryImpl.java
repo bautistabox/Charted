@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactoryImpl implements ConnectionFactory {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/charted_schema?allowPublicKeyRetrieval=true&useSSL=false";
+    private static final String URL = "jdbc:mysql://localhost/charted_schema?useSSL=false";
     private static final String USER = "charted";
     private static final String PASS ="123!@#qweQWE";
 
